@@ -1,1 +1,56 @@
 teensy.exe
+ 
+examples/*/*.o
+
+# Prerequisites
+examples/*/*.d
+
+# Object files
+examples/*/*.o
+examples/*/*.ko
+examples/*/*.obj
+examples/*/*.elf
+
+# Linker output
+examples/*/*.ilk
+examples/*/*.map
+examples/*/*.exp
+
+# Precompiled Headers
+examples/*/*.gch
+examples/*/*.pch
+
+# Libraries
+examples/*/*.lib
+examples/*/*.a
+examples/*/*.la
+examples/*/*.lo
+
+# Shared objects (inc. Windows DLLs)
+examples/*/*.dll
+examples/*/*.so
+examples/*/*.so.*
+examples/*/*.dylib
+
+# Executables
+examples/*/*.exe
+examples/*/*.out
+examples/*/*.app
+examples/*/*.i*86
+examples/*/*.x86_64
+examples/*/*.hex
+
+# Debug files
+examples/*/*.dSYM/
+examples/*/*.su
+examples/*/*.idb
+examples/*/*.pdb
+
+# Kernel Module Compile Results
+examples/*/*.mod*
+examples/*/*.cmd
+.tmp_versions/
+modules.order
+Module.symvers
+Mkfile.old
+dkms.conf
