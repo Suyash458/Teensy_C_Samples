@@ -24,7 +24,7 @@ TOOLPATH = e:/Software/arm-gcc
 #  include folders.  For example, you would expand any Freescale
 #  example folders (such as common or include) and place them
 #  here.
-TEENSY3X_BASEPATH = e:/projects/Teensy3.2
+TEENSY3X_BASEPATH = e:/projects/Teensy_C_Samples
 
 #
 #  Select the target type.  This is typically arm-none-eabi.
