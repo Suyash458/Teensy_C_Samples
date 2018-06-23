@@ -1,14 +1,13 @@
 #include  "common.h"
 
 void gpio_init() {
-	SIM_SCGC5 = SIM_SCGC5 | (1 << SIM_SCGC5_PORTB_SHIFT); //Set clock gating for GPIO
+	SIM_SCGC5 |= SIM_SCGC5_PORTC_MASK; //Set clock gating for GPIO
 	PORTB_PCR17 = (3 << 8) | (1 << 6); //Drive Strength enable and DMA interrupt on either edge
-	GPIOC_PDDR = (1 << 5); //configure pin 5 as output
+	GPIOC_PDDR |= (1 << 5); //configure pin 5 as output
 	PORTC_PCR5 = (1 << 8); //select function for pin 5 as GPIO
 }
 
 void uart_init(uint32_t baud_rate) {
-
 	/*
 	Calculate the uart clock divider in 32nds
 	last 5 bits = fine adjustment
@@ -16,14 +15,13 @@ void uart_init(uint32_t baud_rate) {
 	next 5 bits = BDH
 	*/
 
+	SIM_SCGC4 |=  SIM_SCGC4_UART0_MASK; //Set clock gating for UART0
 	uint32_t baud_rate_divider = (uint32_t)((mcg_clk_hz * 2)/(baud_rate));
 
 	UART0_BDH = (baud_rate_divider >> 13) & 0x1F;
 	UART0_BDL = (baud_rate_divider >> 5) & 0xFF;
 	UART0_C4 = (baud_rate_divider) & 0x1F; //Fine adjustment for remainder
-	UART0_C2 = (1 << UART_C2_TE_SHIFT); //transmitter enable
-
-	SIM_SCGC4 = SIM_SCGC4 | (1 << SIM_SCGC4_UART0_SHIFT); //Set clock gating for UART0
+	UART0_C2 = UART_C2_TE_MASK; //transmitter enable
 }
 
 void uart_send_byte(uint8_t data) {
