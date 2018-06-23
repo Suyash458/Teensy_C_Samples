@@ -10,7 +10,10 @@ void gpio_init() {
 void uart_init(uint32_t baud_rate) {
 	/*
 	Calculate the uart clock divider in 32nds
-	last 5 bits = fine adjustment
+
+	divisor32 = (UART module clock / (16 × baud)) * 32
+	UART0 and UART1 use the system clock(72 Mhz)
+	last 5 bits(remainder) = fine adjustment
 	next 8 bits = BDL
 	next 5 bits = BDH
 	*/
@@ -18,10 +21,10 @@ void uart_init(uint32_t baud_rate) {
 	SIM_SCGC4 |=  SIM_SCGC4_UART0_MASK; //Set clock gating for UART0
 	uint32_t baud_rate_divider = (uint32_t)((mcg_clk_hz * 2)/(baud_rate));
 
-	UART0_BDH = (baud_rate_divider >> 13) & 0x1F;
-	UART0_BDL = (baud_rate_divider >> 5) & 0xFF;
+	UART0_BDH = (baud_rate_divider >> 13) & 0x1F; 
+	UART0_BDL = (baud_rate_divider >> 5) & 0xFF; 
 	UART0_C4 = (baud_rate_divider) & 0x1F; //Fine adjustment for remainder
-	UART0_C2 = UART_C2_TE_MASK; //transmitter enable
+	UART0_C2 |= UART_C2_TE_MASK; //transmitter enable
 }
 
 void uart_send_byte(uint8_t data) {
@@ -29,12 +32,20 @@ void uart_send_byte(uint8_t data) {
 	UART0_D = data;
 }
 
+void uart_println(const char* data) {
+	char* c = data;
+	while (*c) {
+		uart_send_byte(*c++);
+	}
+	uart_send_byte(13);
+}
+
 int main(void) {
 	gpio_init();
 	uart_init(115200);
 
 	while(1) {
-		uart_send_byte(0x4B); //ASCII for 'K';
+		uart_println("Hello, world!"); 
 		GPIOC_PTOR  = (1 << 5); //Toggle LED
 		for(int n=0; n<1000000; n++); //dumb delay
 	}
